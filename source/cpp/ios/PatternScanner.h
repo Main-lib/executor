@@ -28,19 +28,13 @@ namespace iOS {
         
         // Find a byte pattern in memory
         static ScanResult FindPattern(const char* module, const char* pattern, const char* mask) {
-            #ifdef CI_BUILD
-            return ScanResult(0, 0); // Return empty result in CI
-            #else
+            // Implement real pattern scanning on iOS
             // Stub implementation for now - would need real pattern scanning on iOS
             return ScanResult(0, 0);
-            #endif
         }
         
         // Find pattern using string representation (like "48 8B 05 ?? ?? ?? ??")
         static ScanResult FindPattern(const char* module, const char* patternString) {
-            #ifdef CI_BUILD
-            return ScanResult(0, 0); // Return empty result in CI
-            #else
             // Parse pattern string and convert to byte pattern + mask
             std::vector<uint8_t> pattern;
             std::vector<bool> mask;
@@ -71,7 +65,6 @@ namespace iOS {
             }
             
             return FindPattern(module, patternStr.c_str(), maskStr.c_str());
-            #endif
         }
         
         // Get base address of the main executable

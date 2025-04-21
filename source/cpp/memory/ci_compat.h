@@ -1,18 +1,7 @@
 #pragma once
 
-// CI compatibility header
-// This file provides compatibility definitions for continuous integration builds
-// where certain platform-specific features may not be available
-
-// Define CI_BUILD when building in CI environment
-// #define CI_BUILD
-
-// Disable certain features in CI builds
-#ifdef CI_BUILD
-    #define DISABLE_MEMORY_SCANNING
-    #define DISABLE_HOOKS
-    #define DISABLE_JIT
-#endif
+// Memory and platform compatibility header
+// This file provides platform-specific definitions for memory operations
 
 // Platform detection
 #if defined(__APPLE__)
@@ -30,13 +19,8 @@
     #define PLATFORM_LINUX
 #endif
 
-// Memory protection utilities for CI compatibility
-#ifdef CI_BUILD
-    #define MEMORY_PROTECT(addr, size, prot) (void)0
-    #define MEMORY_UNPROTECT(addr, size) (void)0
-#else
-    // Real implementations will be provided elsewhere
-    // These are just forward declarations
-    void* MEMORY_PROTECT(void* addr, size_t size, int prot);
-    bool MEMORY_UNPROTECT(void* addr, size_t size);
-#endif
+// Memory protection utilities
+// Real implementations will be provided elsewhere
+// These are just forward declarations
+void* MEMORY_PROTECT(void* addr, size_t size, int prot);
+bool MEMORY_UNPROTECT(void* addr, size_t size);

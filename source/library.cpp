@@ -2,8 +2,8 @@
 #include <cstring>
 #include <iostream>
 
-// Skip iOS framework integration in CI builds to avoid compilation issues
-#if defined(__APPLE__) && !defined(SKIP_IOS_INTEGRATION)
+// Include iOS framework integration
+#if defined(__APPLE__)
 #include "cpp/ios/ExecutionEngine.h"
 #include "cpp/ios/ScriptManager.h"
 #include "cpp/ios/JailbreakBypass.h"
@@ -15,13 +15,13 @@ static std::shared_ptr<iOS::ExecutionEngine> g_executionEngine;
 static std::shared_ptr<iOS::ScriptManager> g_scriptManager;
 static std::unique_ptr<iOS::UIController> g_uiController;
 #else
-// Define dummy types for CI build
+// Define dummy types for non-iOS platforms
 namespace iOS {
     class ExecutionEngine {};
     class ScriptManager {};
     class UIController {};
 }
-// Empty global references for CI build
+// Empty global references for non-iOS platforms
 static void* g_executionEngine = nullptr;
 static void* g_scriptManager = nullptr;
 static void* g_uiController = nullptr;
@@ -31,9 +31,9 @@ static void* g_uiController = nullptr;
 static bool InitializeLibrary() {
     std::cout << "Initializing Roblox Executor library..." << std::endl;
     
-#if defined(SKIP_IOS_INTEGRATION) || defined(CI_BUILD) || defined(CI_BUILD_NO_VM)
-    // Simplified initialization for CI builds
-    std::cout << "CI build - skipping full initialization" << std::endl;
+#if !defined(__APPLE__)
+    // Simplified initialization for non-iOS platforms
+    std::cout << "Non-iOS platform - skipping full initialization" << std::endl;
     return true;
 #else
     try {
@@ -103,9 +103,9 @@ extern "C" {
     bool ExecuteScript(const char* script) {
         if (!script) return false;
         
-        #if defined(SKIP_IOS_INTEGRATION) || defined(CI_BUILD) || defined(CI_BUILD_NO_VM)
-        // Stub implementation for CI builds
-        std::cout << "CI build - ExecuteScript stub called" << std::endl;
+        #if !defined(__APPLE__)
+        // Stub implementation for non-iOS platforms
+        std::cout << "Non-iOS platform - ExecuteScript stub called" << std::endl;
         return true;
         #else
         if (!g_executionEngine) return false;
@@ -138,13 +138,12 @@ extern "C" {
     bool ProtectMemory(void* address, size_t size, int protection) {
         if (!address || size == 0) return false;
         
-        #if defined(SKIP_IOS_INTEGRATION) || defined(CI_BUILD) || defined(CI_BUILD_NO_VM)
-        // Stub implementation for CI builds
-        std::cout << "CI build - ProtectMemory stub called" << std::endl;
+        #if !defined(__APPLE__)
+        // Stub implementation for non-iOS platforms
+        std::cout << "Non-iOS platform - ProtectMemory stub called" << std::endl;
         return true;
         #else
         // Platform-specific memory protection implementation
-        #ifdef __APPLE__
         // iOS memory protection
         vm_prot_t prot = 0;
         if (protection & 1) prot |= VM_PROT_READ;
@@ -153,10 +152,6 @@ extern "C" {
         
         kern_return_t result = vm_protect(mach_task_self(), (vm_address_t)address, size, FALSE, prot);
         return result == KERN_SUCCESS;
-        #else
-        // Add other platform implementations as needed
-        return false;
-        #endif
         #endif
     }
     
@@ -175,9 +170,9 @@ extern "C" {
     
     // UI integration
     bool InjectRobloxUI() {
-        #if defined(SKIP_IOS_INTEGRATION) || defined(CI_BUILD) || defined(CI_BUILD_NO_VM)
-        // Stub implementation for CI builds
-        std::cout << "CI build - InjectRobloxUI stub called" << std::endl;
+        #if !defined(__APPLE__)
+        // Stub implementation for non-iOS platforms
+        std::cout << "Non-iOS platform - InjectRobloxUI stub called" << std::endl;
         return true;
         #else
         if (!g_uiController) return false;
@@ -193,9 +188,9 @@ extern "C" {
     
     // AI features
     void AIFeatures_Enable(bool enable) {
-        #if defined(SKIP_IOS_INTEGRATION) || defined(CI_BUILD) || defined(CI_BUILD_NO_VM)
-        // Stub implementation for CI builds
-        std::cout << "CI build - AIFeatures_Enable stub called: " << (enable ? "true" : "false") << std::endl;
+        #if !defined(__APPLE__)
+        // Stub implementation for non-iOS platforms
+        std::cout << "Non-iOS platform - AIFeatures_Enable stub called: " << (enable ? "true" : "false") << std::endl;
         #else
         // Implementation depends on AIIntegration class
         if (g_executionEngine) {
@@ -208,19 +203,17 @@ extern "C" {
     }
     
     void AIIntegration_Initialize() {
-        #if defined(SKIP_IOS_INTEGRATION) || defined(CI_BUILD) || defined(CI_BUILD_NO_VM)
-        // Stub implementation for CI builds
-        std::cout << "CI build - AIIntegration_Initialize stub called" << std::endl;
+        #if !defined(__APPLE__)
+        // Stub implementation for non-iOS platforms
+        std::cout << "Non-iOS platform - AIIntegration_Initialize stub called" << std::endl;
         #else
         // Initialize AI integration
         #ifdef ENABLE_AI_FEATURES
-            #ifdef __APPLE__
             // Initialize iOS-specific AI features
             if (g_executionEngine) {
                 std::cout << "Initializing AI Integration..." << std::endl;
                 // Make appropriate calls to initialize AI subsystem
             }
-            #endif
         #endif
         #endif
     }
@@ -230,9 +223,9 @@ extern "C" {
         
         static std::string suggestions;
         
-        #if defined(SKIP_IOS_INTEGRATION) || defined(CI_BUILD) || defined(CI_BUILD_NO_VM)
-        // Stub implementation for CI builds
-        suggestions = "-- CI build - GetScriptSuggestions stub called";
+        #if !defined(__APPLE__)
+        // Stub implementation for non-iOS platforms
+        suggestions = "-- Non-iOS platform - GetScriptSuggestions stub called";
         #else
         #ifdef ENABLE_AI_FEATURES
         // Implement AI-based script suggestions

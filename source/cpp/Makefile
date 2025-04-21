@@ -16,7 +16,7 @@ OUTDIR = $(BUILDDIR)/lib
 # Compiler flags
 CXXFLAGS = -std=c++17 -Wall -I./source -I./source/cpp -I./VM/include
 CXXFLAGS += -isysroot $(SDK) -arch $(ARCHS) -mios-version-min=$(MIN_VERSION)
-CXXFLAGS += -DSKIP_IOS_INTEGRATION=1 -DPLATFORM_IOS=1
+CXXFLAGS += -DPLATFORM_IOS=1
 LDFLAGS = -dynamiclib -isysroot $(SDK) -arch $(ARCHS)
 
 # Source files (excluding Objective-C++ files)

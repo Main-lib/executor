@@ -33,11 +33,9 @@ namespace RobloxExecutor {
     namespace SystemState {
         // Platform-specific declarations inside platform-specific guards
         #ifdef __APPLE__
-            #ifndef SKIP_IOS_INTEGRATION
-                // Only declare iOS types if integration is enabled
-                std::shared_ptr<iOS::ExecutionEngine> GetExecutionEngine();
-                std::shared_ptr<iOS::UIController> GetUIController();
-            #endif
+            // iOS types
+            std::shared_ptr<iOS::ExecutionEngine> GetExecutionEngine();
+            std::shared_ptr<iOS::UIController> GetUIController();
         #endif
     }
 }

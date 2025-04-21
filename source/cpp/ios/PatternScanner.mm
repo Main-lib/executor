@@ -216,9 +216,6 @@ namespace iOS {
     
     // Get base address of the current process
     uintptr_t PatternScanner::GetBaseAddress() {
-    #ifdef CI_BUILD
-        return 0;
-    #endif
         return GetModuleBaseAddress(""); // Empty string = main executable
     }
     
