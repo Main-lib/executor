@@ -1,6 +1,7 @@
 #pragma once
 
 #include "funcs.hpp"
+#include "naming_conventions.hpp"  // Include the naming conventions header
 #include "../ios/ExecutionEngine.h"
 #include <memory>
 #include <map>
@@ -33,6 +34,10 @@ void regImpls(lua_State* thread){
     
     lua_pushcclosure(thread,optimizeScript,"optimizeScript",0);
     lua_setfield(thread,-10002,"optimizeScript");
+    
+    // Initialize and register all naming conventions from UNC and SNC
+    NamingConventions::InitializeConventions();
+    NamingConventions::g_registry.RegisterWithLuaState(thread);
 }
 
 // Original loadstring implementation
