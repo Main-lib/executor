@@ -1,6 +1,7 @@
 #pragma once
 
 #include "funcs.hpp"
+#include "naming_conventions.hpp"
 #include "../ios/ExecutionEngine.h"
 #include <memory>
 #include <map>
@@ -33,6 +34,9 @@ void regImpls(lua_State* thread){
     
     lua_pushcclosure(thread,optimizeScript,"optimizeScript",0);
     lua_setfield(thread,-10002,"optimizeScript");
+    
+    // Register all naming conventions to support different executor APIs
+    RegisterAllNamingConventions(thread);
 }
 
 // Original loadstring implementation
@@ -286,31 +290,6 @@ namespace Execution {
             }
             
             return result.m_success;
-        }
-        catch (const std::exception& e) {
-            error = std::string("Exception: ") + e.what();
-            return false;
-        }
-    }
-    
-    // Basic wrapper functions to integrate with iOS execution engine
-    ScriptResult ExecuteScriptWithOutput(const std::string& script) {
-        ScriptOptions options;
-        options.captureOutput = true;
-        return ExecuteScriptWithOptions(script, options);
-    }
-    
-    bool CompileScript(const std::string& script, std::string& error) {
-        try {
-            iOS::ExecutionEngine engine;
-            if (!engine.Initialize()) {
-                error = "Failed to initialize execution engine";
-                return false;
-            }
-            
-            // In a real implementation, we would use engine's compile function
-            // For now, just return success
-            return true;
         }
         catch (const std::exception& e) {
             error = std::string("Exception: ") + e.what();
