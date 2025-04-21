@@ -1,71 +1,58 @@
 #pragma once
 
+#include <cstdint>
 #include <string>
 #include <functional>
-#include <unordered_map>
 #include <vector>
-#include <map>
-#include <iostream>
-#include <mutex>
-
-// Forward declarations for Objective-C runtime types
-#ifdef __APPLE__
-#include <objc/runtime.h>
-typedef void* HookIMP; // Use custom name to avoid conflict with system IMP
-#else
-typedef void* Class;
-typedef void* Method;
-typedef void* SEL;
-typedef void* HookIMP;
-typedef void* id;
-#endif
+#include <unordered_map>
 
 namespace Hooks {
-    // Function hook types
-    using HookFunction = std::function<void*(void*)>;
-    using UnhookFunction = std::function<bool(void*)>;
+
+// Function pointer type for hooks
+using HookFunction = void*;
+
+// Hook callback type
+using HookCallback = std::function<void(void*)>;
+
+// Hook information structure
+struct HookInfo {
+    uintptr_t target;
+    HookFunction detour;
+    HookFunction original;
+    std::string name;
+    bool enabled;
+};
+
+// Hook engine class
+class HookEngine {
+public:
+    // Initialize the hook engine
+    static bool Initialize();
     
-    // Main hooking engine
-    class HookEngine {
-    public:
-        // Initialize the hook engine
-        static bool Initialize();
-        
-        // Register hooks
-        static bool RegisterHook(void* targetAddr, void* hookAddr, void** originalAddr);
-        static bool UnregisterHook(void* targetAddr);
-        
-        // Hook management
-        static void ClearAllHooks();
-        
-    private:
-        // Track registered hooks
-        static std::unordered_map<void*, void*> s_hookedFunctions;
-        static std::mutex s_hookMutex;
-    };
+    // Clean up and remove all hooks
+    static void Shutdown();
     
-    // Platform-specific hook implementations
-    namespace Implementation {
-        // Hook function implementation
-        bool HookFunction(void* target, void* replacement, void** original);
-        
-        // Unhook function implementation
-        bool UnhookFunction(void* target);
-    }
+    // Create a new hook
+    static bool CreateHook(uintptr_t target, HookFunction detour, HookFunction* original, const std::string& name = "");
     
-    // Objective-C Method hooking
-    class ObjcMethodHook {
-    public:
-        static bool HookMethod(const std::string& className, const std::string& selectorName, 
-                             void* replacementFn, void** originalFn);
-        
-        static bool UnhookMethod(const std::string& className, const std::string& selectorName);
-        
-        static void ClearAllHooks();
-        
-    private:
-        // Keep track of hooked methods
-        static std::map<std::string, std::pair<Class, SEL>> s_hookedMethods;
-        static std::mutex s_methodMutex;
-    };
-}
+    // Remove a hook
+    static bool RemoveHook(uintptr_t target);
+    
+    // Enable/disable a hook
+    static bool EnableHook(uintptr_t target, bool enable);
+    
+    // Get all registered hooks
+    static std::vector<HookInfo> GetAllHooks();
+    
+    // Clear all hooks
+    static void ClearAllHooks();
+    
+private:
+    // Map of target addresses to hook information
+    static std::unordered_map<uintptr_t, HookInfo> s_hooks;
+    
+    // Whether the hook engine is initialized
+    static bool s_initialized;
+};
+
+} // namespace Hooks
