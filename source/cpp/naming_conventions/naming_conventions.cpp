@@ -178,6 +178,7 @@ void NamingConventionManager::InitializeUNC() {
     RegisterAliases("getscriptclosure", {"getscriptfunction"}, ConventionType::UNC, "Get the closure of a script");
     RegisterAlias("hookfunction", "hookfunction", ConventionType::UNC, "Hook a function");
     RegisterAliases("hookfunction", {"replaceclosure"}, ConventionType::UNC, "Hook a function");
+    RegisterAlias("closuretype", "closuretype", ConventionType::UNC, "Get the type of a closure");
     RegisterAlias("iscclosure", "iscclosure", ConventionType::UNC, "Check if a function is a C closure");
     RegisterAlias("islclosure", "islclosure", ConventionType::UNC, "Check if a function is a Lua closure");
     RegisterAlias("isexecutorclosure", "isexecutorclosure", ConventionType::UNC, "Check if a function is an executor closure");
@@ -235,67 +236,70 @@ void NamingConventionManager::InitializeUNC() {
     // WebSocket functions
     RegisterAlias("WebSocket", "WebSocket", ConventionType::UNC, "WebSocket library");
     RegisterAlias("WebSocket.connect", "WebSocket.connect", ConventionType::UNC, "Connect to a WebSocket server");
-// Cryptography functions
-RegisterAlias("crypt.base64decode", "crypt.base64decode", ConventionType::UNC, "Decode base64 data");
-RegisterAlias("crypt.base64encode", "crypt.base64encode", ConventionType::UNC, "Encode data as base64");
-RegisterAlias("crypt.decrypt", "crypt.decrypt", ConventionType::UNC, "Decrypt data");
-RegisterAlias("crypt.encrypt", "crypt.encrypt", ConventionType::UNC, "Encrypt data");
-RegisterAlias("crypt.generatebytes", "crypt.generatebytes", ConventionType::UNC, "Generate random bytes");
-RegisterAlias("crypt.generatekey", "crypt.generatekey", ConventionType::UNC, "Generate a cryptographic key");
-RegisterAlias("crypt.hash", "crypt.hash", ConventionType::UNC, "Hash data");
+    
+    // Cryptography functions
+    RegisterAlias("crypt.base64decode", "crypt.base64decode", ConventionType::UNC, "Decode base64 data");
+    RegisterAliases("crypt.base64decode", {"crypt.base64.decode", "crypt.base64_decode", "base64.decode", "base64_decode"}, ConventionType::UNC, "Decode base64 data");
+    RegisterAlias("crypt.base64encode", "crypt.base64encode", ConventionType::UNC, "Encode data as base64");
+    RegisterAliases("crypt.base64encode", {"crypt.base64.encode", "crypt.base64_encode", "base64.encode", "base64_encode"}, ConventionType::UNC, "Encode data as base64");
+    RegisterAlias("crypt.decrypt", "crypt.decrypt", ConventionType::UNC, "Decrypt data");
+    RegisterAlias("crypt.encrypt", "crypt.encrypt", ConventionType::UNC, "Encrypt data");
+    RegisterAlias("crypt.generatebytes", "crypt.generatebytes", ConventionType::UNC, "Generate random bytes");
+    RegisterAlias("crypt.generatekey", "crypt.generatekey", ConventionType::UNC, "Generate a cryptographic key");
+    RegisterAlias("crypt.hash", "crypt.hash", ConventionType::UNC, "Hash data");
 
-// Debug functions
-RegisterAlias("debug.getconstant", "debug.getconstant", ConventionType::UNC, "Get a constant from a function");
-RegisterAlias("debug.getconstants", "debug.getconstants", ConventionType::UNC, "Get all constants from a function");
-RegisterAlias("debug.getinfo", "debug.getinfo", ConventionType::UNC, "Get information about a function");
-RegisterAlias("debug.getproto", "debug.getproto", ConventionType::UNC, "Get a proto from a function");
-RegisterAlias("debug.getprotos", "debug.getprotos", ConventionType::UNC, "Get all protos from a function");
-RegisterAlias("debug.getstack", "debug.getstack", ConventionType::UNC, "Get the stack of a thread");
-RegisterAlias("debug.getupvalue", "debug.getupvalue", ConventionType::UNC, "Get an upvalue from a function");
-RegisterAlias("debug.getupvalues", "debug.getupvalues", ConventionType::UNC, "Get all upvalues from a function");
-RegisterAlias("debug.print", "debug.print", ConventionType::UNC, "Print debug information");
-RegisterAlias("debug.setconstant", "debug.setconstant", ConventionType::UNC, "Set a constant in a function");
-RegisterAlias("debug.setstack", "debug.setstack", ConventionType::UNC, "Set a value in the stack");
-RegisterAlias("debug.setupvalue", "debug.setupvalue", ConventionType::UNC, "Set an upvalue in a function");
+    // Debug functions
+    RegisterAlias("debug.getconstant", "debug.getconstant", ConventionType::UNC, "Get a constant from a function");
+    RegisterAlias("debug.getconstants", "debug.getconstants", ConventionType::UNC, "Get all constants from a function");
+    RegisterAlias("debug.getinfo", "debug.getinfo", ConventionType::UNC, "Get information about a function");
+    RegisterAlias("debug.getproto", "debug.getproto", ConventionType::UNC, "Get a proto from a function");
+    RegisterAlias("debug.getprotos", "debug.getprotos", ConventionType::UNC, "Get all protos from a function");
+    RegisterAlias("debug.getstack", "debug.getstack", ConventionType::UNC, "Get the stack of a thread");
+    RegisterAlias("debug.getupvalue", "debug.getupvalue", ConventionType::UNC, "Get an upvalue from a function");
+    RegisterAlias("debug.getupvalues", "debug.getupvalues", ConventionType::UNC, "Get all upvalues from a function");
+    RegisterAlias("debug.print", "debug.print", ConventionType::UNC, "Print debug information");
+    RegisterAlias("debug.setconstant", "debug.setconstant", ConventionType::UNC, "Set a constant in a function");
+    RegisterAlias("debug.setstack", "debug.setstack", ConventionType::UNC, "Set a value in the stack");
+    RegisterAlias("debug.setupvalue", "debug.setupvalue", ConventionType::UNC, "Set an upvalue in a function");
 
-// File system functions
-RegisterAlias("appendfile", "appendfile", ConventionType::UNC, "Append to a file");
-RegisterAlias("delfile", "delfile", ConventionType::UNC, "Delete a file");
-RegisterAlias("delfolder", "delfolder", ConventionType::UNC, "Delete a folder");
-RegisterAlias("dofile", "dofile", ConventionType::UNC, "Execute a file");
-RegisterAlias("isfile", "isfile", ConventionType::UNC, "Check if a file exists");
-RegisterAlias("isfolder", "isfolder", ConventionType::UNC, "Check if a folder exists");
-RegisterAlias("listfiles", "listfiles", ConventionType::UNC, "List files in a folder");
-RegisterAlias("loadfile", "loadfile", ConventionType::UNC, "Load a file as a function");
-RegisterAlias("makefolder", "makefolder", ConventionType::UNC, "Create a folder");
-RegisterAlias("readfile", "readfile", ConventionType::UNC, "Read a file");
-RegisterAlias("writefile", "writefile", ConventionType::UNC, "Write to a file");
+    // File system functions
+    RegisterAlias("appendfile", "appendfile", ConventionType::UNC, "Append to a file");
+    RegisterAlias("delfile", "delfile", ConventionType::UNC, "Delete a file");
+    RegisterAlias("delfolder", "delfolder", ConventionType::UNC, "Delete a folder");
+    RegisterAlias("dofile", "dofile", ConventionType::UNC, "Execute a file");
+    RegisterAlias("isfile", "isfile", ConventionType::UNC, "Check if a file exists");
+    RegisterAlias("isfolder", "isfolder", ConventionType::UNC, "Check if a folder exists");
+    RegisterAlias("listfiles", "listfiles", ConventionType::UNC, "List files in a folder");
+    RegisterAlias("loadfile", "loadfile", ConventionType::UNC, "Load a file as a function");
+    RegisterAlias("makefolder", "makefolder", ConventionType::UNC, "Create a folder");
+    RegisterAlias("readfile", "readfile", ConventionType::UNC, "Read a file");
+    RegisterAlias("writefile", "writefile", ConventionType::UNC, "Write to a file");
 
-// Instance interaction functions
-RegisterAlias("fireclickdetector", "fireclickdetector", ConventionType::UNC, "Fire a click detector");
-RegisterAlias("fireproximityprompt", "fireproximityprompt", ConventionType::UNC, "Fire a proximity prompt");
-RegisterAlias("firesignal", "firesignal", ConventionType::UNC, "Fire a signal");
-RegisterAlias("firetouchinterest", "firetouchinterest", ConventionType::UNC, "Fire a touch interest");
-RegisterAlias("getcallbackvalue", "getcallbackvalue", ConventionType::UNC, "Get a callback value");
-RegisterAlias("getconnections", "getconnections", ConventionType::UNC, "Get connections from a signal");
-RegisterAlias("getcustomasset", "getcustomasset", ConventionType::UNC, "Get a custom asset");
-RegisterAlias("gethiddenproperty", "gethiddenproperty", ConventionType::UNC, "Get a hidden property");
-RegisterAlias("gethui", "gethui", ConventionType::UNC, "Get the hidden UI");
-RegisterAlias("getinstances", "getinstances", ConventionType::UNC, "Get all instances");
-RegisterAlias("getnilinstances", "getnilinstances", ConventionType::UNC, "Get nil instances");
-RegisterAlias("isrbxactive", "isrbxactive", ConventionType::UNC, "Check if Roblox is active");
-RegisterAlias("sethiddenproperty", "sethiddenproperty", ConventionType::UNC, "Set a hidden property");
+    // Instance interaction functions
+    RegisterAlias("fireclickdetector", "fireclickdetector", ConventionType::UNC, "Fire a click detector");
+    RegisterAlias("fireproximityprompt", "fireproximityprompt", ConventionType::UNC, "Fire a proximity prompt");
+    RegisterAlias("firesignal", "firesignal", ConventionType::UNC, "Fire a signal");
+    RegisterAlias("firetouchinterest", "firetouchinterest", ConventionType::UNC, "Fire a touch interest");
+    RegisterAlias("getcallbackvalue", "getcallbackvalue", ConventionType::UNC, "Get a callback value");
+    RegisterAlias("getconnections", "getconnections", ConventionType::UNC, "Get connections from a signal");
+    RegisterAlias("getcustomasset", "getcustomasset", ConventionType::UNC, "Get a custom asset");
+    RegisterAlias("gethiddenproperty", "gethiddenproperty", ConventionType::UNC, "Get a hidden property");
+    RegisterAlias("gethui", "gethui", ConventionType::UNC, "Get the hidden UI");
+    RegisterAlias("getinstances", "getinstances", ConventionType::UNC, "Get all instances");
+    RegisterAlias("getnilinstances", "getnilinstances", ConventionType::UNC, "Get nil instances");
+    RegisterAlias("isrbxactive", "isrbxactive", ConventionType::UNC, "Check if Roblox is active");
+    RegisterAlias("sethiddenproperty", "sethiddenproperty", ConventionType::UNC, "Set a hidden property");
 
-// Mouse input functions
-RegisterAlias("mouse1click", "mouse1click", ConventionType::UNC, "Simulate a left mouse click");
-RegisterAlias("mouse1press", "mouse1press", ConventionType::UNC, "Simulate a left mouse press");
-RegisterAlias("mouse1release", "mouse1release", ConventionType::UNC, "Simulate a left mouse release");
-RegisterAlias("mouse2click", "mouse2click", ConventionType::UNC, "Simulate a right mouse click");
-RegisterAlias("mouse2press", "mouse2press", ConventionType::UNC, "Simulate a right mouse press");
-RegisterAlias("mouse2release", "mouse2release", ConventionType::UNC, "Simulate a right mouse release");
-RegisterAlias("mousemoveabs", "mousemoveabs", ConventionType::UNC, "Move the mouse to absolute coordinates");
-RegisterAlias("mousemoverel", "mousemoverel", ConventionType::UNC, "Move the mouse by relative coordinates");
-RegisterAlias("mousescroll", "mousescroll", ConventionType::UNC, "Simulate mouse scrolling");
+    // Mouse input functions
+    RegisterAlias("mouse1click", "mouse1click", ConventionType::UNC, "Simulate a left mouse click");
+    RegisterAlias("mouse1press", "mouse1press", ConventionType::UNC, "Simulate a left mouse press");
+    RegisterAlias("mouse1release", "mouse1release", ConventionType::UNC, "Simulate a left mouse release");
+    RegisterAlias("mouse2click", "mouse2click", ConventionType::UNC, "Simulate a right mouse click");
+    RegisterAlias("mouse2press", "mouse2press", ConventionType::UNC, "Simulate a right mouse press");
+    RegisterAlias("mouse2release", "mouse2release", ConventionType::UNC, "Simulate a right mouse release");
+    RegisterAlias("mousemoveabs", "mousemoveabs", ConventionType::UNC, "Move the mouse to absolute coordinates");
+    RegisterAlias("mousemoverel", "mousemoverel", ConventionType::UNC, "Move the mouse by relative coordinates");
+    RegisterAlias("mousescroll", "mousescroll", ConventionType::UNC, "Simulate mouse scrolling");
     
     // Player functions
     RegisterAlias("getplayer", "getplayer", ConventionType::UNC, "Get a player");
@@ -303,6 +307,13 @@ RegisterAlias("mousescroll", "mousescroll", ConventionType::UNC, "Simulate mouse
     RegisterAlias("getplayers", "getplayers", ConventionType::UNC, "Get all players");
     RegisterAlias("runanimation", "runanimation", ConventionType::UNC, "Run an animation");
     RegisterAliases("runanimation", {"playanimation"}, ConventionType::UNC, "Run an animation");
+    
+    // SNC-specific aliases
+    RegisterAlias("is_salad_closure", "isexecutorclosure", ConventionType::UNC, "Check if a function is a Salad closure");
+    RegisterAlias("is_essence_closure", "isexecutorclosure", ConventionType::UNC, "Check if a function is an Essence closure");
+    RegisterAlias("is_ronix_closure", "isexecutorclosure", ConventionType::UNC, "Check if a function is a Ronix closure");
+    RegisterAlias("is_awp_closure", "isexecutorclosure", ConventionType::UNC, "Check if a function is an AWP closure");
+    RegisterAlias("is_wave_closure", "isexecutorclosure", ConventionType::UNC, "Check if a function is a Wave closure");
 }
 
 // Initialize SNC naming convention
@@ -382,67 +393,70 @@ void NamingConventionManager::InitializeSNC() {
     // WebSocket functions
     RegisterAlias("WebSocket", "WebSocket", ConventionType::SNC, "WebSocket library");
     RegisterAlias("WebSocket.connect", "WebSocket.connect", ConventionType::SNC, "Connect to a WebSocket server");
-// Cryptography functions
-RegisterAlias("crypt.base64decode", "crypt.base64decode", ConventionType::SNC, "Decode base64 data");
-RegisterAlias("crypt.base64encode", "crypt.base64encode", ConventionType::SNC, "Encode data as base64");
-RegisterAlias("crypt.decrypt", "crypt.decrypt", ConventionType::SNC, "Decrypt data");
-RegisterAlias("crypt.encrypt", "crypt.encrypt", ConventionType::SNC, "Encrypt data");
-RegisterAlias("crypt.generatebytes", "crypt.generatebytes", ConventionType::SNC, "Generate random bytes");
-RegisterAlias("crypt.generatekey", "crypt.generatekey", ConventionType::SNC, "Generate a cryptographic key");
-RegisterAlias("crypt.hash", "crypt.hash", ConventionType::SNC, "Hash data");
+    
+    // Cryptography functions
+    RegisterAlias("crypt.base64decode", "crypt.base64decode", ConventionType::SNC, "Decode base64 data");
+    RegisterAliases("crypt.base64decode", {"crypt.base64.decode", "crypt.base64_decode", "base64.decode", "base64_decode"}, ConventionType::SNC, "Decode base64 data");
+    RegisterAlias("crypt.base64encode", "crypt.base64encode", ConventionType::SNC, "Encode data as base64");
+    RegisterAliases("crypt.base64encode", {"crypt.base64.encode", "crypt.base64_encode", "base64.encode", "base64_encode"}, ConventionType::SNC, "Encode data as base64");
+    RegisterAlias("crypt.decrypt", "crypt.decrypt", ConventionType::SNC, "Decrypt data");
+    RegisterAlias("crypt.encrypt", "crypt.encrypt", ConventionType::SNC, "Encrypt data");
+    RegisterAlias("crypt.generatebytes", "crypt.generatebytes", ConventionType::SNC, "Generate random bytes");
+    RegisterAlias("crypt.generatekey", "crypt.generatekey", ConventionType::SNC, "Generate a cryptographic key");
+    RegisterAlias("crypt.hash", "crypt.hash", ConventionType::SNC, "Hash data");
 
-// Debug functions
-RegisterAlias("debug.getconstant", "debug.getconstant", ConventionType::SNC, "Get a constant from a function");
-RegisterAlias("debug.getconstants", "debug.getconstants", ConventionType::SNC, "Get all constants from a function");
-RegisterAlias("debug.getinfo", "debug.getinfo", ConventionType::SNC, "Get information about a function");
-RegisterAlias("debug.getproto", "debug.getproto", ConventionType::SNC, "Get a proto from a function");
-RegisterAlias("debug.getprotos", "debug.getprotos", ConventionType::SNC, "Get all protos from a function");
-RegisterAlias("debug.getstack", "debug.getstack", ConventionType::SNC, "Get the stack of a thread");
-RegisterAlias("debug.getupvalue", "debug.getupvalue", ConventionType::SNC, "Get an upvalue from a function");
-RegisterAlias("debug.getupvalues", "debug.getupvalues", ConventionType::SNC, "Get all upvalues from a function");
-RegisterAlias("debug.print", "debug.print", ConventionType::SNC, "Print debug information");
-RegisterAlias("debug.setconstant", "debug.setconstant", ConventionType::SNC, "Set a constant in a function");
-RegisterAlias("debug.setstack", "debug.setstack", ConventionType::SNC, "Set a value in the stack");
-RegisterAlias("debug.setupvalue", "debug.setupvalue", ConventionType::SNC, "Set an upvalue in a function");
+    // Debug functions
+    RegisterAlias("debug.getconstant", "debug.getconstant", ConventionType::SNC, "Get a constant from a function");
+    RegisterAlias("debug.getconstants", "debug.getconstants", ConventionType::SNC, "Get all constants from a function");
+    RegisterAlias("debug.getinfo", "debug.getinfo", ConventionType::SNC, "Get information about a function");
+    RegisterAlias("debug.getproto", "debug.getproto", ConventionType::SNC, "Get a proto from a function");
+    RegisterAlias("debug.getprotos", "debug.getprotos", ConventionType::SNC, "Get all protos from a function");
+    RegisterAlias("debug.getstack", "debug.getstack", ConventionType::SNC, "Get the stack of a thread");
+    RegisterAlias("debug.getupvalue", "debug.getupvalue", ConventionType::SNC, "Get an upvalue from a function");
+    RegisterAlias("debug.getupvalues", "debug.getupvalues", ConventionType::SNC, "Get all upvalues from a function");
+    RegisterAlias("debug.print", "debug.print", ConventionType::SNC, "Print debug information");
+    RegisterAlias("debug.setconstant", "debug.setconstant", ConventionType::SNC, "Set a constant in a function");
+    RegisterAlias("debug.setstack", "debug.setstack", ConventionType::SNC, "Set a value in the stack");
+    RegisterAlias("debug.setupvalue", "debug.setupvalue", ConventionType::SNC, "Set an upvalue in a function");
 
-// File system functions
-RegisterAlias("appendfile", "appendfile", ConventionType::SNC, "Append to a file");
-RegisterAlias("delfile", "delfile", ConventionType::SNC, "Delete a file");
-RegisterAlias("delfolder", "delfolder", ConventionType::SNC, "Delete a folder");
-RegisterAlias("dofile", "dofile", ConventionType::SNC, "Execute a file");
-RegisterAlias("isfile", "isfile", ConventionType::SNC, "Check if a file exists");
-RegisterAlias("isfolder", "isfolder", ConventionType::SNC, "Check if a folder exists");
-RegisterAlias("listfiles", "listfiles", ConventionType::SNC, "List files in a folder");
-RegisterAlias("loadfile", "loadfile", ConventionType::SNC, "Load a file as a function");
-RegisterAlias("makefolder", "makefolder", ConventionType::SNC, "Create a folder");
-RegisterAlias("readfile", "readfile", ConventionType::SNC, "Read a file");
-RegisterAlias("writefile", "writefile", ConventionType::SNC, "Write to a file");
+    // File system functions
+    RegisterAlias("appendfile", "appendfile", ConventionType::SNC, "Append to a file");
+    RegisterAlias("delfile", "delfile", ConventionType::SNC, "Delete a file");
+    RegisterAlias("delfolder", "delfolder", ConventionType::SNC, "Delete a folder");
+    RegisterAlias("dofile", "dofile", ConventionType::SNC, "Execute a file");
+    RegisterAlias("isfile", "isfile", ConventionType::SNC, "Check if a file exists");
+    RegisterAlias("isfolder", "isfolder", ConventionType::SNC, "Check if a folder exists");
+    RegisterAlias("listfiles", "listfiles", ConventionType::SNC, "List files in a folder");
+    RegisterAlias("loadfile", "loadfile", ConventionType::SNC, "Load a file as a function");
+    RegisterAlias("makefolder", "makefolder", ConventionType::SNC, "Create a folder");
+    RegisterAlias("readfile", "readfile", ConventionType::SNC, "Read a file");
+    RegisterAlias("writefile", "writefile", ConventionType::SNC, "Write to a file");
 
-// Instance interaction functions
-RegisterAlias("fireclickdetector", "fireclickdetector", ConventionType::SNC, "Fire a click detector");
-RegisterAlias("fireproximityprompt", "fireproximityprompt", ConventionType::SNC, "Fire a proximity prompt");
-RegisterAlias("firesignal", "firesignal", ConventionType::SNC, "Fire a signal");
-RegisterAlias("firetouchinterest", "firetouchinterest", ConventionType::SNC, "Fire a touch interest");
-RegisterAlias("getcallbackvalue", "getcallbackvalue", ConventionType::SNC, "Get a callback value");
-RegisterAlias("getconnections", "getconnections", ConventionType::SNC, "Get connections from a signal");
-RegisterAlias("getcustomasset", "getcustomasset", ConventionType::SNC, "Get a custom asset");
-RegisterAlias("gethiddenproperty", "gethiddenproperty", ConventionType::SNC, "Get a hidden property");
-RegisterAlias("gethui", "gethui", ConventionType::SNC, "Get the hidden UI");
-RegisterAlias("getinstances", "getinstances", ConventionType::SNC, "Get all instances");
-RegisterAlias("getnilinstances", "getnilinstances", ConventionType::SNC, "Get nil instances");
-RegisterAlias("isrbxactive", "isrbxactive", ConventionType::SNC, "Check if Roblox is active");
-RegisterAlias("sethiddenproperty", "sethiddenproperty", ConventionType::SNC, "Set a hidden property");
+    // Instance interaction functions
+    RegisterAlias("fireclickdetector", "fireclickdetector", ConventionType::SNC, "Fire a click detector");
+    RegisterAlias("fireproximityprompt", "fireproximityprompt", ConventionType::SNC, "Fire a proximity prompt");
+    RegisterAlias("firesignal", "firesignal", ConventionType::SNC, "Fire a signal");
+    RegisterAlias("firetouchinterest", "firetouchinterest", ConventionType::SNC, "Fire a touch interest");
+    RegisterAlias("getcallbackvalue", "getcallbackvalue", ConventionType::SNC, "Get a callback value");
+    RegisterAlias("getconnections", "getconnections", ConventionType::SNC, "Get connections from a signal");
+    RegisterAlias("getcustomasset", "getcustomasset", ConventionType::SNC, "Get a custom asset");
+    RegisterAlias("gethiddenproperty", "gethiddenproperty", ConventionType::SNC, "Get a hidden property");
+    RegisterAlias("gethui", "gethui", ConventionType::SNC, "Get the hidden UI");
+    RegisterAlias("getinstances", "getinstances", ConventionType::SNC, "Get all instances");
+    RegisterAlias("getnilinstances", "getnilinstances", ConventionType::SNC, "Get nil instances");
+    RegisterAlias("isrbxactive", "isrbxactive", ConventionType::SNC, "Check if Roblox is active");
+    RegisterAlias("sethiddenproperty", "sethiddenproperty", ConventionType::SNC, "Set a hidden property");
 
-// Mouse input functions
-RegisterAlias("mouse1click", "mouse1click", ConventionType::SNC, "Simulate a left mouse click");
-RegisterAlias("mouse1press", "mouse1press", ConventionType::SNC, "Simulate a left mouse press");
-RegisterAlias("mouse1release", "mouse1release", ConventionType::SNC, "Simulate a left mouse release");
-RegisterAlias("mouse2click", "mouse2click", ConventionType::SNC, "Simulate a right mouse click");
-RegisterAlias("mouse2press", "mouse2press", ConventionType::SNC, "Simulate a right mouse press");
-RegisterAlias("mouse2release", "mouse2release", ConventionType::SNC, "Simulate a right mouse release");
-RegisterAlias("mousemoveabs", "mousemoveabs", ConventionType::SNC, "Move the mouse to absolute coordinates");
-RegisterAlias("mousemoverel", "mousemoverel", ConventionType::SNC, "Move the mouse by relative coordinates");
-RegisterAlias("mousescroll", "mousescroll", ConventionType::SNC, "Simulate mouse scrolling");
+    // Mouse input functions
+    RegisterAlias("mouse1click", "mouse1click", ConventionType::SNC, "Simulate a left mouse click");
+    RegisterAlias("mouse1press", "mouse1press", ConventionType::SNC, "Simulate a left mouse press");
+    RegisterAlias("mouse1release", "mouse1release", ConventionType::SNC, "Simulate a left mouse release");
+    RegisterAlias("mouse2click", "mouse2click", ConventionType::SNC, "Simulate a right mouse click");
+    RegisterAlias("mouse2press", "mouse2press", ConventionType::SNC, "Simulate a right mouse press");
+    RegisterAlias("mouse2release", "mouse2release", ConventionType::SNC, "Simulate a right mouse release");
+    RegisterAlias("mousemoveabs", "mousemoveabs", ConventionType::SNC, "Move the mouse to absolute coordinates");
+    RegisterAlias("mousemoverel", "mousemoverel", ConventionType::SNC, "Move the mouse by relative coordinates");
+    RegisterAlias("mousescroll", "mousescroll", ConventionType::SNC, "Simulate mouse scrolling");
     
     // Player functions
     RegisterAlias("getplayer", "getplayer", ConventionType::SNC, "Get a player");
